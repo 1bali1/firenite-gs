@@ -24,6 +24,7 @@
 #include "gui.h"
 #include "FortAthenaMutator_InventoryOverride.h"
 #include "FortAthenaMutator_TDM.h"
+#include "backend.h"
 
 void AFortPlayerController::ClientReportDamagedResourceBuilding(ABuildingSMActor* BuildingSMActor, EFortResourceType PotentialResourceType, int PotentialResourceCount, bool bDestroyed, bool bJustHitWeakspot)
 {
@@ -1388,11 +1389,15 @@ void AFortPlayerController::ClientOnPawnDiedHook(AFortPlayerController* PlayerCo
 				KillerPlayerState->Get<int>(MemberOffsets::FortPlayerStateAthena::TeamKillScore)++;
 
 			KillerPlayerState->ClientReportKill(DeadPlayerState);
+			// ! asdy ide
+			// TODO: placeholder, nem lesz ennyie lég
+			SendKill(KillerPlayerState->GetPlayerID(), DeadPlayerState->GetPlayerID())
 
 			// KillerPlayerState->OnRep_Kills();
-
+			
 			if (AmountOfHealthSiphon > 0)
 			{
+
 				auto KillerAbilityComp = KillerPlayerState->GetAbilitySystemComponent();
 
 				if (KillerAbilityComp)
