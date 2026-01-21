@@ -1,7 +1,7 @@
 #include "backend.h"
 #include <thread>
 #include <iostream>
-//#include <Windowsh.h> // nem fog menni a pcmen tho
+//#include <Windowsh.h> // ! nem fog menni a pcmen tho, windowson kell buildelni
 #include <string>
 #include <thread>
 #include <curl/curl.h>
@@ -36,7 +36,20 @@ namespace Backend {
                 json jsonData;
                 jsonData["player"] = playerId;
                 jsonData["killer"] = killerId;
+                string jsonStr = jsonData.dump();
+
+                curl_easy_setopt(curl, CURLOPT_URL, apiUrl);
+                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, jsonStr.c_str());
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                
+                curl_easy_setopt(curl, CURLOPT_TIMEOUT, 2L);
+
+                CURLcode response = curl_easy_perform(curl);
+                
+                curl_easy_cleanup(curl);
+                curl_slist_free_all(headers);
+
             }
-        });
+        }).detach();
     } 
 }
